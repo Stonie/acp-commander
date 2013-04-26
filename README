@@ -1,0 +1,114 @@
+####################################
+###                              ###
+###   README for acp_commander   ### 
+###                              ###
+####################################
+
+ACP_Commander can be used to remotely control your arm9-based LS Pro/LS Live/Tera Pro v2/Tera Live.
+It connects to a stock process so it even works with the stock firmware + in EM Mode.
+
+You only need acp_commander.jar
+there is no GUI at the moment, just commandline.
+
+=============================================
+=======   The most important uses     =======
+=============================================
+1) spawning telnet + clearing the root password (Option "-o" )
+
+2) clearing /boot when you encounter an ACP_State_Failure while trying to reflash
+via the firmware updater because /boot is full. the old hddrootfs-files will be
+deleted there. (Option "-cb" )
+
+3) installing wget, joe, su via addons.tar (Option "-addons")
+3a) if addons.tar is in the same folder it will install it
+3b) if not then it will download the addons.tar from the downloadsection
+
+=============================================
+=======        Prerequisites         ========
+=============================================
+1) make sure you have a java-runtime installed
+
+2) have your buffalo-arm9-NASbox fully booted. regardless if EM mode or normal mode.
+
+3) Change to the Commandline
+Win32: Start/Execute/"cmd" or Start/Ausf?hren/"cmd"
+
+4) Change to the folder where you downloaded the acp_commander-jar-file.
+you will get this error message if you are in the wrong folder:
+"Unable to access jarfile acp_commander.jar"
+
+=============================================
+=======           Examples            =======
+=============================================
+buffalo-arm9-NASbox-IP: 192.168.1.11 (replace it with the IP of your box)
+
+-) most common one (starting telnet + clear root password + install addons-package)
+java -jar acp_commander.jar -t 192.168.1.11 -o -addons
+
+-) we want to spawn telnet + clear root password:
+java -jar acp_commander.jar -t 192.168.1.11 -o
+
+-) spawn telnet/clear root PW + clear /boot (ACP_State_Failure)
+java -jar acp_commander.jar -t 192.168.1.11 -o -cb 
+
+-) install addons.jar (either have it locally in the same folder or it will be downloaded)
+java -jar acp_commander.jar -t 192.168.1.11 -addons 
+
+=============================================
+======= Normal output without options =======
+=============================================
+#java -jar acp_commander.jar
+ACP_commander out of the linkstationwiki.net project.
+Used to send ACP-commands to Buffalo linkstation(R) LS-PRO.
+
+WARNING: This is experimental software that might brick your linkstation!
+
+
+Version 0.4.0 (beta)
+
+Usage:  acp_commander [options] -t target
+
+options are:
+   -t target .. IP or network name of the Linkstation.
+   -m MAC   ... define targets mac address set in the ACP package.
+   -na      ... no authorisation, skip the ACP_AUTH packet.
+   -ba      ... use bug/bufferoverflow on LS to bypass usuall password
+                authentication. Standard until acp_commander 0.4.
+   -pw passwd . your LS admin password.
+   -i ID    ... define a connection identifier, standard: random value.
+   -p port  ... define alternative target port, default = 22936
+   -b localIP.. bind to local address.
+
+   -f       ... find linkstation(s).
+   -o       ... open the linkstation by sending 'telnetd' and 'passwd -d root'.
+   -c cmd   ... sends the given shell command cmd to the linkstation.
+   -s       ... interactive shell.
+   -cb      ... clearoot, output of df follows for control of success.
+   -ip newIP... change IP to newIP (basic support).
+   -save    ... save configuration.
+   -load    ... load configuration.
+   -blink   ... blink LED's and play some tones.
+   -gui nr  ... set WEB GUI language 0=Jap, 1=Eng, 2=Ger
+   -addons  ... install addons.tar from local or linkstationwiki.
+   -diag    ... run some diagnostics on LS settings (lang, backup).
+   -emmode  ... Linkstation reboots next into EM-mode.
+   -normmode .. Linkstation reboots next into normal mode.
+   -reboot  ... reboot Linkstation.
+   -shutdown .. shut Linkstation down.
+
+   -d1 | -d2 .. set debug level, generate additional output
+   -q       ... quiet, surpress header, does not work with -h or -v
+   -h | -v  ... extended help
+   -u       ... usage (this output)
+
+*)  this is not the MAC address the packet is sent to, but the address within
+    the ACP packet. The linkstation will only react to ACP packets if they
+    carry the correct (its) MAC-address or FF:FF:FF:FF:FF:FF
+
+This program is the result of the work done at nas-central.org (linkstationwiki.net), which is
+not related with Buffalo(R) in any way.
+
+Experimental software, use with care, it might brick your Linkstation!
+
+
+code by Georg, readme here by mindbender
